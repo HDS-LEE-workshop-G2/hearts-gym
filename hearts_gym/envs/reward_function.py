@@ -70,5 +70,7 @@ class RewardFunction:
         if self.game.prev_trick_winner_index == player_index:
             assert self.game.prev_trick_penalty is not None
             return -self.game.prev_trick_penalty
+        elif self.game.prev_trick_penalty is not None:
+            return 0.25*self.game.prev_trick_penalty
         return 1
         # return -penalty
