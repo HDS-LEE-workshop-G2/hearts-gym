@@ -71,6 +71,6 @@ class RewardFunction:
             assert self.game.prev_trick_penalty is not None
             return -self.game.prev_trick_penalty
         elif self.game.prev_trick_penalty is not None:
-            return 0.25*self.game.prev_trick_penalty
+            return 1+0.25*self.game.prev_trick_penalty
         return 1
         # return -penalty
