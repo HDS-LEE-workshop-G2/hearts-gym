@@ -79,10 +79,10 @@ class RewardFunction:
             card_value = 0.25 * (card.rank / 13.) ** 2 * 13
 
         # check if the card is from the color with only few cards on hand -> play first if possible to be blank in one color
-        hand = self.game.prev_hands[self.game.active_player_index]
-        number_of_cards_with_same_suit = len([c for c in hand if c.suit == card.suit])
-        if number_of_cards_with_same_suit < 0.25 * len(hand):
-            card_value *= 2
+        #hand = self.game.prev_hands[self.game.active_player_index]
+        #number_of_cards_with_same_suit = len([c for c in hand if c.suit == card.suit])
+        #if number_of_cards_with_same_suit < 0.25 * len(hand):
+        #    card_value *= 2
 
 
         if self.game.prev_trick_winner_index == player_index:
