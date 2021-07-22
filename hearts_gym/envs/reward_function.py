@@ -6,6 +6,7 @@ import numpy as np
 
 from hearts_gym.utils.typing import Reward
 from .hearts_env import HeartsEnv
+from ..envs.card_deck import Card
 
 
 class RewardFunction:
@@ -49,8 +50,9 @@ class RewardFunction:
         Returns:
             Reward: Reward for the player with the given index.
         """
-        if self.game.prev_was_illegals[player_index]:
-            return -self.game.max_penalty * self.game.max_num_cards_on_hand
+        # should not happen for now...
+        #if self.game.prev_was_illegals[player_index]:
+        #    return -self.game.max_penalty * self.game.max_num_cards_on_hand
 
         card = self.game.prev_played_cards[player_index]
 
@@ -59,16 +61,23 @@ class RewardFunction:
             # to provide.
             return 0
 
-        if trick_is_over and self.game.has_shot_the_moon(player_index):
-            return self.game.max_penalty * self.game.max_num_cards_on_hand
+        #if trick_is_over and self.game.has_shot_the_moon(player_index):
+        #    return self.game.max_penalty * self.game.max_num_cards_on_hand
 
         # penalty = self.game.penalties[player_index]
 
         # if self.game.is_done():
         #     return -penalty
+        card_value = 0
+        if card.suit == Card.SUIT_SPADE and card.rank == self.game.RANK_QUEEN:
+            card_value = self.game.get_penalty(card)
+        elif card.suit == Card.SUIT_HEART:
+            card_value = self.game.get_penalty(card) * 0.5 * card.rank
+        else:
+            card_value = 0.25 * card.rank
 
         if self.game.prev_trick_winner_index == player_index:
             assert self.game.prev_trick_penalty is not None
             return -self.game.prev_trick_penalty
-        return 1
+        return card_value / 13.
         # return -penalty
