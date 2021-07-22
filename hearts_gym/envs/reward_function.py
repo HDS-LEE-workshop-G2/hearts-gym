@@ -68,13 +68,22 @@ class RewardFunction:
 
         # if self.game.is_done():
         #     return -penalty
+
+        # assign a reward to a card on your hand
         card_value = 0
         if card.suit == Card.SUIT_SPADE and card.rank == self.game.RANK_QUEEN:
             card_value = self.game.get_penalty(card)
         elif card.suit == Card.SUIT_HEART:
-            card_value = self.game.get_penalty(card) * 0.5 * card.rank
+            card_value = self.game.get_penalty(card) * 0.5 * (card.rank / 13.) ** 2 * 13
         else:
-            card_value = 0.25 * card.rank
+            card_value = 0.25 * (card.rank / 13.) ** 2 * 13
+
+        # check if the card is from the color with only few cards on hand -> play first if possible to be blank in one color
+        hand = self.game.prev_hands[self.game.active_player_index]
+        number_of_cards_with_same_suit = len([c for c in hand if c.suit == card.suit])
+        if number_of_cards_with_same_suit < 0.25 * len(hand):
+            card_value *= 2
+
 
         if self.game.prev_trick_winner_index == player_index:
             assert self.game.prev_trick_penalty is not None
