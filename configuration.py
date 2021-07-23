@@ -104,6 +104,7 @@ opt_metric: str = 'episode_reward_mean'
 opt_mode: str = 'max'
 
 stop_config = {
+    #'timesteps_total': 200000,
     'timesteps_total': 2000000,
 }
 
@@ -134,7 +135,8 @@ config = {
     },
     'num_gpus': utils.get_num_gpus(framework),
     'num_workers': utils.get_num_cpus() - 1,
-    'framework': framework,
+    #'framework': framework,
+    'framework': 'tfe',
 
     # 'lr': 3e-4,
     # 'gamma': 0.999,

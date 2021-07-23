@@ -62,13 +62,14 @@ class RewardFunction:
         if trick_is_over and self.game.has_shot_the_moon(player_index):
             return self.game.max_penalty * self.game.max_num_cards_on_hand
 
-        # penalty = self.game.penalties[player_index]
-
-        # if self.game.is_done():
-        #     return -penalty
-
-        if self.game.prev_trick_winner_index == player_index:
-            assert self.game.prev_trick_penalty is not None
-            return -self.game.prev_trick_penalty
-        return 1
-        # return -penalty
+        if self.game.prev_trick_penalty is not None:
+            if self.game.prev_trick_winner_index == player_index and self.game.prev_leading_player_index == player_index:
+                return -self.game.prev_trick_penalty - max(self.game.get_penalty(card),0.5)*2
+            elif self.game.prev_trick_winner_index == player_index and self.game.prev_leading_player_index != player_index:
+                return -self.game.prev_trick_penalty - max(self.game.get_penalty(card),0.5)
+            elif self.game.prev_trick_winner_index != player_index and self.game.prev_leading_player_index == player_index:
+                return self.game.prev_trick_penalty + max(self.game.get_penalty(card),0.5)*2
+            elif self.game.prev_trick_winner_index != player_index and self.game.prev_leading_player_index != player_index:
+                return self.game.prev_trick_penalty + max(self.game.get_penalty(card),0.5)
+        else:
+            return 1

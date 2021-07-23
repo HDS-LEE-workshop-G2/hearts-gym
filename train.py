@@ -189,4 +189,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    ray.shutdown()
     main()
