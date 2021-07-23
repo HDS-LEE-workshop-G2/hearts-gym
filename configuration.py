@@ -93,7 +93,7 @@ it may sometimes even offer better support.
 # RLLib config
 
 algorithm = 'PPO'
-checkpoint_path: Optional[str] = None
+checkpoint_path: Optional[str] = '/home/zoel_ml/hds-lee-hackathon/hearts-gym/results/PPO/PPO_Hearts-v0_fb475_00000_0_2021-07-23_10-14-20/checkpoint_002728/checkpoint-2728'
 """Path of a checkpoint to load. Use `None` to not load a checkpoint."""
 resume = False
 """Whether to resume the most recent run."""
@@ -120,7 +120,7 @@ opt_metric: str = 'episode_reward_mean'
 opt_mode: str = 'max'
 
 stop_config = {
-    'timesteps_total': 2000000,
+    'timesteps_total': 40000000,
 }
 
 scheduler = tune.schedulers.FIFOScheduler()
@@ -148,11 +148,11 @@ config = {
         },
         'policy_mapping_fn': policy_mapping_fn,
     },
-    'num_gpus': utils.get_num_gpus(framework),
-    'num_workers': utils.get_num_cpus() - 1,
+    'num_gpus': 0, #utils.get_num_gpus(framework),
+    'num_workers': 55, #utils.get_num_cpus() - 1,
     'framework': framework,
+    'sgd_minibatch_size': 3000,
 
     # 'lr': 3e-4,
     # 'gamma': 0.999,
-    # 'sgd_minibatch_size': 512,
 }
