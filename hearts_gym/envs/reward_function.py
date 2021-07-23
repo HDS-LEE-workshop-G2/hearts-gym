@@ -6,6 +6,7 @@ import numpy as np
 
 from hearts_gym.utils.typing import Reward
 from .hearts_env import HeartsEnv
+from ..envs.card_deck import Card
 
 
 class RewardFunction:
@@ -58,6 +59,16 @@ class RewardFunction:
             # The agent did not take a turn until now; no information
             # to provide.
             return 0
+        
+        # assign a reward to a card on your hand
+        card_value = 0
+        if card.suit == Card.SUIT_SPADE and card.rank == self.game.RANK_QUEEN:
+            card_value = self.game.get_penalty(card)
+        elif card.suit == Card.SUIT_HEART:
+            card_value = self.game.get_penalty(card) * 0.5 * (card.rank / 13.) ** 2 * 13
+        else:
+            card_value = 0.25 * (card.rank / 13.) ** 2 * 13
+            
 
         if trick_is_over and self.game.has_shot_the_moon(player_index):
             return self.game.max_penalty * self.game.max_num_cards_on_hand
@@ -72,4 +83,4 @@ class RewardFunction:
             elif self.game.prev_trick_winner_index != player_index and self.game.prev_leading_player_index != player_index:
                 return self.game.prev_trick_penalty + max(self.game.get_penalty(card),0.5)
         else:
-            return 1
+            return card_value / 13
